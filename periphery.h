@@ -33,6 +33,12 @@ class Periphery {
       }
     }
 
+    void setSensorsToZero() {
+      for (int i = 0; i < SENSOR_COUNT; i++) {
+        this->sensors[i]->setZero();
+      }
+    }
+
     void reset() {
       for (int i = 0; i < SENSOR_COUNT; i++) {
         this->sensors[i]->reset();
@@ -47,7 +53,7 @@ class Periphery {
 
     void updateDisplay() {
       for (int i = 0; i < SENSOR_COUNT; i++) {
-        display.drawSensorValuesOnGrid(i, SENSOR_COUNT, sensors[i]);
+        display.drawSensorValuesInRow(i, SENSOR_COUNT, sensors[i]);
       }
     }
 };
