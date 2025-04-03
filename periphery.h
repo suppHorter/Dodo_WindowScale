@@ -1,38 +1,54 @@
 #ifndef __PERIPHERY_
+#define __PERIPHERY_
+
 #include "periphery_sensor.h"
 #include "periphery_display.h"
 
+static const int SENSOR_COUNT = 1; // 8;
+
 class Periphery {
   private:
-    int SENSOR_COUNT = 1;
-    int[SENSOR_COUNT] sensorPins = [A0];  // [A0, A1, A2, A3, A4, A5, A6, A7];
-    Sensor[SENSOR_COUNT] sensors;
+    uint8_t sensorPins[SENSOR_COUNT] = {A0};  // [A0, A1, A2, A3, A4, A5, A6, A7];
+    Sensor* sensors[SENSOR_COUNT]; // Zeiger auf Sensor-Objekte
     Display display = Display();
 
   public:
-    Periphery() {}
+    Periphery() {
+      for (int i = 0; i < SENSOR_COUNT; i++) {
+        sensors[i] = new Sensor(sensorPins[i]); // Initialisierung der Sensoren
+      }
+    }
+
+    ~Periphery() {
+      for (int i = 0; i < SENSOR_COUNT; i++) {
+        delete sensors[i]; // Speicher freigeben
+      }
+    }
 
     void init() {
-      for (int i=0; i<sizeof(this->sensors); i++) {
-        this->sensors[i] = Sensor(this->sensorPins[i])
+      this->display.init();
+
+      for (int i = 0; i < SENSOR_COUNT; i++) {
+        this->sensors[i]->init();
       }
     }
 
     void reset() {
-      for (int i=0; i<sizeof(this->sensors); i++) {
+      for (int i = 0; i < SENSOR_COUNT; i++) {
         this->sensors[i]->reset();
       }
     }
 
-    int proceedData() {
-      for (int i=0; i<sizeof(this->sensors); i++) {
+    int readSensors() {
+      for (int i = 0; i < SENSOR_COUNT; i++) {
         this->sensors[i]->read();
-        this->display->draw(i, this->sensors[i]->getLastMeassurement());
       }
     }
 
-    int getSensorCount() {
-      return this->SENSOR_COUNT;
+    void updateDisplay() {
+      for (int i = 0; i < SENSOR_COUNT; i++) {
+        display.draw(i, SENSOR_COUNT, sensors[i]); // Zeiger übergeben
+      }
     }
-}
+};
 #endif

@@ -1,4 +1,6 @@
 #ifndef __PERIPHERY_SENSOR_
+#define __PERIPHERY_SENSOR_
+
 class Sensor {
   private:
     int analogPin;
@@ -21,7 +23,7 @@ class Sensor {
       this->maxMeassurement = this->meassurement;
     }
 
-    return analogRead(this->meassurement);
+    return this->meassurement;
   }
 
   void reset() {
