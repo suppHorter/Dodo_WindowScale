@@ -4,8 +4,8 @@
 class Sensor {
   private:
     int analogPin;
-    int meassurement;
-    int maxMeassurement;
+    float weight;
+    float maxWeight;
 
   public:
     Sensor(int analogPin) {
@@ -16,27 +16,34 @@ class Sensor {
     pinMode(this->analogPin, INPUT);
   }
 
-  int read() {
-    this->meassurement = analogRead(this->analogPin);
+  void read() {
+    this->weight = Sensor::parseVoltageToKilogram(analogRead(this->analogPin));
 
-    if (this->meassurement > this->maxMeassurement) {
-      this->maxMeassurement = this->meassurement;
+    if (this->weight > this->maxWeight) {
+      this->maxWeight = this->weight;
+    }
+  }
+
+  static float parseVoltageToKilogram(int _weight) {
+    if (_weight <= 0) {
+      return 0.0f;
     }
 
-    return this->meassurement;
+    return 0.0f; //(_weight / 1023.0) * 5.0;
   }
 
   void reset() {
-    this->maxMeassurement = 0;
-    this->meassurement = 0;
+    this->maxWeight = 0;
+    this->weight = 0;
   }
 
-  int getMaxMeassurement() {
-    return this->maxMeassurement;
+  int getMaxWeight() {
+    return this->maxWeight;
   }
 
-  int getLastMeassurement() {
-    return this->meassurement;
+  int getLastWeight() {
+    return this->weight;
   }
 };
+
 #endif

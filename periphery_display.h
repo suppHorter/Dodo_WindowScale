@@ -29,15 +29,20 @@ class Display {
       this->display.clear();
     }
 
-    void draw(int position, int sensorCount, Sensor *sensor) {
+    void drawSensorValuesOnGrid(int position, int sensorCount, Sensor *sensor) {
       int positionYDelta = this->heightPixel / (sensorCount + 1);
       int y = positionYDelta * position;
       int x = 10;
 
-      this->display.drawRectangle(x, y, x, positionYDelta * (position + 1), COLOR_BLACK);
-
       this->display.setGFXFont(&FreeSans12pt7b);
-      this->display.drawGFXText(x, y, String(sensor->getLastMeassurement()).c_str(), COLOR_GREEN);
+      this->display.drawRectangle(0, y, this->widthPixel, positionYDelta * (position + 1), COLOR_BLACK);
+
+      this->display.drawGFXText(x, y, String(sensor->getLastWeight()).c_str(), COLOR_GREEN);
+
+      x = (this->widthPixel / 2) + 10;
+
+      this->display.drawGFXText(x, y, String(sensor->getMaxWeight()).c_str(), COLOR_RED);
     }
 };
+
 #endif
