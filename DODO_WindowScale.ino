@@ -2,6 +2,7 @@
 
 Periphery periphery;
 bool zeroingRequested = false;
+const byte interruptPin = 2; // D2
 // todo: decide if display should be updated asynchronous
 // #define DISPLAY_UPDATE_INTERVAL 1000
 
@@ -27,6 +28,4 @@ void loop() {
 
 void requestScaleZeroing() {
   zeroingRequested = true;
-  Serial.println("Requesting scale zeroing");
-  periphery.reset();
 }
